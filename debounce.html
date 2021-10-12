@@ -8,8 +8,13 @@
     <style>
         input{
             width: 355px;
+            height: 30px;
             border: none;
-            border-bottom: groove;
+            border-bottom: groove red;
+            margin-right: 140px;
+            outline: none;
+            background-color: rgb(53, 35, 35);
+            color: white;
         }
         #movies{
             height: 600px;
@@ -23,18 +28,40 @@
         #inputandbox{
             text-align: end;
         }
+        #container{
+            background-color: rgb(27, 26, 26);
+            height: 1200px;
+        }
+        .head{
+            width: 260px;
+            font-size: 60px;
+            color: rgb(84, 31, 8);
+            margin: auto;
+            background-color: yellow;
+            border-radius: 40%;
+        }
+        p{
+            color: violet;
+        }
     </style>
 </head>
 <body>
     <div id="container">
+        <div class="head">Chill~Flix</div>
         <div id="inputandbox">
     <input type="text" oninput="debounce(main,1000)" id="input" placeholder="Movie">
     <!-- <div id="movies"></div> -->
 </div>
+<div id="showselectedmovie"></div>
 </div>
 </body>
 </html>
 <script>
+    var input=document.getElementById("input")
+        input.onclick=function(){
+            input.style.width="400px";
+            
+        }
     var time_id;
     var movies_div=document.createElement("div");
         movies_div.setAttribute("id","movies")
@@ -64,7 +91,7 @@ try{
             div.style.width="100%";
             div.style.height="150px";
             div.style.marginTop="5px"
-            div.style.backgroundColor="red";
+            div.style.backgroundColor="rgb(84, 31, 8)";
             div.style.display="flex"
             var img=document.createElement('img');
             img.src=movie.Poster;
@@ -74,6 +101,20 @@ try{
             let p=document.createElement("p")
             p.innerText=movie.Title;
             div.append(img,p)
+            div.onclick=function(){
+                alert(movie.Title);
+                movies_div.style.display="none";
+                var show_img=document.createElement("img");
+                img.src=movie.Poster;
+                img.style.width="300px"
+                var show_div=document.createElement("div");
+                var title=document.createElement("p")
+                title.innerText=" Title : " +movie.Title;
+                var year=document.createElement("p");
+                year.innerText=" Released in : "+movie.Year;
+                var showselectedmovie=document.getElementById("showselectedmovie");
+                showselectedmovie.append(img,title,year)
+            }
             movies_div.append(div);
             show_movie.append(movies_div)
         })
@@ -81,7 +122,9 @@ try{
     // passing the data
     async function main(){
         var input=document.getElementById("input")
-        input.style.width="440px"
+        input.onclick=function(){
+            input.style.width="400px"
+        }
         var name=input.value;
         if(name.length<3){
             return false
