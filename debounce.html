@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input{
+            width: 355px;
+            border: none;
+            border-bottom: groove;
+        }
+        #movies{
+            height: 600px;
+            width: 460px;
+            border: 1px solid;
+            overflow: scroll;
+            border-top:none;
+            text-align: center;
+            margin-left: 60%;
+        }
+        #inputandbox{
+            text-align: end;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="inputandbox">
+    <input type="text" oninput="debounce(main,1000)" id="input" placeholder="Movie">
+    <!-- <div id="movies"></div> -->
+</div>
+</div>
+</body>
+</html>
+<script>
+    var time_id;
+    var movies_div=document.createElement("div");
+        movies_div.setAttribute("id","movies")
+    // fetching the data
+    async function findmoviedata(movie_name){
+try{
+    let res=  await fetch (`http://www.omdbapi.com/?apikey=c177405a&s=${movie_name}`)
+        let data= await res.json();
+       
+        return data;
+}catch(error){
+    console.log(erorr)
+}
+       
+    }
+    // appending elements
+    function appendMovies(movies){
+        let show_movie=document.getElementById("inputandbox");
+     
+        movies_div.innerHTML=null;
+        if(movies===undefined){
+            return false
+        }
+        movies.forEach(function(movie){
+            
+            var div=document.createElement('div');
+            div.style.width="100%";
+            div.style.height="150px";
+            div.style.marginTop="5px"
+            div.style.backgroundColor="red";
+            div.style.display="flex"
+            var img=document.createElement('img');
+            img.src=movie.Poster;
+           img.style.width="40%";
+           img.style.height="90%";
+           img.style.padding="10px"
+            let p=document.createElement("p")
+            p.innerText=movie.Title;
+            div.append(img,p)
+            movies_div.append(div);
+            show_movie.append(movies_div)
+        })
+    }
+    // passing the data
+    async function main(){
+        var input=document.getElementById("input")
+        input.style.width="440px"
+        var name=input.value;
+        if(name.length<3){
+            return false
+        }
+        let res=await findmoviedata(name);
+        appendMovies(res.Search)
+        console.log(res.Search)
+    }
+    // debouncing the data
+    function debounce(func,t){
+        if(time_id){
+            clearInterval(time_id)
+        }
+        time_id=setTimeout(function(){
+            func()
+        },t)
+    }
+</script>
