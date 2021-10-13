@@ -18,45 +18,110 @@
         }
         #movies{
             height: 600px;
-            width: 460px;
+            width: 400px;
             border: 1px solid;
             overflow: scroll;
             border-top:none;
             text-align: center;
-            margin-left: 60%;
+           
         }
         #inputandbox{
             text-align: end;
+            /* border: solid 2px; */
+            width: 400px;
+            margin-left: 800px;
+            position: fixed;
         }
         #container{
             background-color: rgb(27, 26, 26);
-            height: 1200px;
+            height: 500px;
+            color: crimson;
         }
         .head{
-            width: 260px;
-            font-size: 60px;
-            color: rgb(84, 31, 8);
+            width: 100%;
+            font-size: 30px;
+            color: rgb(229, 239, 237);
             margin: auto;
-            background-color: yellow;
-            border-radius: 40%;
+            /* background-color: rgb(139, 139, 127); */
+          
+            position: fixed;
+            display: flex;
+        }
+        .head>div{
+            margin-left: 30px;
         }
         p{
-            color: violet;
+            color: rgb(43, 182, 21);
         }
+       #slide{
+          
+       
+        width: 38%;
+        margin-left: 5%;
+       display: grid;
+       grid-template-columns: 60% 30%;
+        margin-top: 10%;
+        position: fixed;
+       }
+       #chill{
+           width: 10%;
+           padding: 10px;
+           background-color: royalblue;
+           border-radius: 50%;
+       }
+       #trending{
+           color: seagreen;
+           
+           background-color: seashell;
+           overflow: auto;
+            white-space: nowrap;
+       }
+       #trending>div{
+           display: inline-block;
+           padding: 10px;
+       }
+       #popular{
+        color: seagreen;
+           margin-top: -10px;
+           background-color: seashell;
+           overflow: auto;
+            white-space: nowrap;
+       }
+       #popular>div{
+        display: inline-block;
+           padding: 10px;
+       }
     </style>
 </head>
-<body>
+<body style="background-color: rgb(25, 26, 26);">
+    
     <div id="container">
-        <div class="head">Chill~Flix</div>
+        <div class="head">
+           <div id="chill">Chill~Flix</div> 
+           <div>TV</div>
+           <div>Movies</div>
+           <div>Sports</div>
+           <div>Chill+</div>
+        </div>
+    
         <div id="inputandbox">
+           
     <input type="text" oninput="debounce(main,1000)" id="input" placeholder="Movie">
     <!-- <div id="movies"></div> -->
 </div>
-<div id="showselectedmovie"></div>
+<div id="slide"><img src="https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/old_images/MOVIE/4578/1000154578/1000154578-h" width="400% " height="400px"></div>
+
+</div>
+<div id="container2">
+    <p style="font-size: 40px;">Trending</p>
+<div id="trending"></div>
+<p style="font-size: 40px;">Popular</p>
+<div id="popular"></div>
 </div>
 </body>
 </html>
 <script>
+    var slide=document.getElementById("slide")
     var input=document.getElementById("input")
         input.onclick=function(){
             input.style.width="400px";
@@ -70,7 +135,7 @@
 try{
     let res=  await fetch (`http://www.omdbapi.com/?apikey=c177405a&s=${movie_name}`)
         let data= await res.json();
-       
+       console.log(data)
         return data;
 }catch(error){
     console.log(erorr)
@@ -79,45 +144,7 @@ try{
     }
     // appending elements
     function appendMovies(movies){
-        let show_movie=document.getElementById("inputandbox");
-     
-        movies_div.innerHTML=null;
-        if(movies===undefined){
-            return false
-        }
-        movies.forEach(function(movie){
-            
-            var div=document.createElement('div');
-            div.style.width="100%";
-            div.style.height="150px";
-            div.style.marginTop="5px"
-            div.style.backgroundColor="rgb(84, 31, 8)";
-            div.style.display="flex"
-            var img=document.createElement('img');
-            img.src=movie.Poster;
-           img.style.width="40%";
-           img.style.height="90%";
-           img.style.padding="10px"
-            let p=document.createElement("p")
-            p.innerText=movie.Title;
-            div.append(img,p)
-            div.onclick=function(){
-                alert(movie.Title);
-                movies_div.style.display="none";
-                var show_img=document.createElement("img");
-                img.src=movie.Poster;
-                img.style.width="300px"
-                var show_div=document.createElement("div");
-                var title=document.createElement("p")
-                title.innerText=" Title : " +movie.Title;
-                var year=document.createElement("p");
-                year.innerText=" Released in : "+movie.Year;
-                var showselectedmovie=document.getElementById("showselectedmovie");
-                showselectedmovie.append(img,title,year)
-            }
-            movies_div.append(div);
-            show_movie.append(movies_div)
-        })
+    
     }
     // passing the data
     async function main(){
@@ -127,12 +154,104 @@ try{
         }
         var name=input.value;
         if(name.length<3){
-            return false
+            input.style.width="300px";
+            movies_div.innerHTML="";
+            movies_div.style.width="0px";
+            movies_div.style.border="none"
+            return false;
+
         }
+        else{
+            input.style.width="400px"
+            movies_div.style.width="400px";
+            movies_div.style.height="500px"
+            //   height: 600px;
+            // width: 400px;
+            // border: 1px solid;
+            // overflow: scroll;
+            // border-top:none;
+            // text-align: center;
         let res=await findmoviedata(name);
-        appendMovies(res.Search)
-        console.log(res.Search)
+        movies=res.Search;
+
+        // appendMovies(res.Search)
+        let show_movie=document.getElementById("inputandbox");
+     
+     movies_div.innerHTML=null;
+     if(movies===undefined){
+         return false;
+
+     }
+     
+     movies.forEach(function(movie){
+         
+         var div=document.createElement('div');
+         div.style.width="100%";
+         div.style.height="100px";
+         div.style.marginTop="5px"
+         div.style.backgroundColor="rgb(84, 31, 8)";
+         div.style.display="flex"
+         var img=document.createElement('img');
+         img.src=movie.Poster;
+        img.style.width="40%";
+        img.style.height="90%";
+        img.style.padding="10px"
+         let p=document.createElement("p")
+         p.innerText=movie.Title;
+         div.append(img,p)
+         div.onclick=function(){
+            //  alert(movie.Title);
+             if(localStorage.getItem("demovie")===null){
+                 localStorage.setItem("demovie",JSON.stringify([]))
+             }
+             slide.innerHTML="";
+            
+            movies_div.style.width="0px";
+            movies_div.style.height="0px";
+            var showdiv=document.createElement("div");
+            showdiv.style.width="100%";
+             var img=document.createElement("img");
+             img.src=movie.Poster;
+            //  img.style.width="50%"
+             img.style.height="380px"
+             var text_div=document.createElement("div");
+             text_div.style.display="inline";
+            //  text_div.style.marginLeft="300px"
+             text_div.style.paddingTop="200px"
+            //  text_div.style.border="solid red";
+             text_div.style.width="200px";
+            //  text_div.style.height="100px"
+            
+             var Title=document.createElement("p");
+             var p=document.createElement("p")
+             p.innerText= "Released in : "+movie.Year
+           
+             Title.innerText= "TITLE : "+ movie.Title;
+             text_div.append(Title,p)
+             
+             showdiv.append(img)
+             slide.append(showdiv,text_div)
+
+         }
+        
+         movies_div.append(div);
+         show_movie.append(movies_div)
+        
+
+     })
+
+    }//
+
+        console.log(movies)
     }
+
+
+
+
+
+
+
+
     // debouncing the data
     function debounce(func,t){
         if(time_id){
@@ -142,4 +261,103 @@ try{
             func()
         },t)
     }
+
+    async function show(){
+        let res=await fetch (`https://api.themoviedb.org/3/movie/top_rated?api_key=5e6fc583c7106815bcd4093a90cdf271`)
+      
+        let data= await res.json()
+        
+        let movie_data=data.results;
+     movie_data.forEach(element => {
+        //  console.log(element)
+           var div=document.createElement('div');
+           div.style.width="120px"
+           var img=document.createElement("img");
+           div.onclick=()=>{
+               alert(element.original_title)
+ // start
+ slide.innerHTML=null;
+            var showdiv=document.createElement("div");
+            showdiv.style.width="100%";
+             var img=document.createElement("img");
+             img.src=`https://image.tmdb.org/t/p/original/${element.poster_path}`;
+            
+             img.style.height="380px"
+             var text_div=document.createElement("div");
+             text_div.style.display="inline";
+           
+             text_div.style.paddingTop="200px"
+          
+             text_div.style.width="200px";
+         
+            
+             var Title=document.createElement("p");
+             var p=document.createElement("p")
+             p.innerText= "Released in : "+element.release_date
+           
+             Title.innerText= "TITLE : "+ element.original_title
+             text_div.append(Title,p)
+             
+             showdiv.append(img)
+             slide.append(showdiv,text_div)
+            // end
+
+           }
+         img.src=`https://image.tmdb.org/t/p/original/${element.poster_path}`
+         img.style.width="100%"
+          div.append(img)
+          var popular=document.getElementById("popular");
+          popular.append(div)
+       });
+       console.log(data)
+    }
+    show()
+    async function popular(){
+        let res =await fetch("https://api.themoviedb.org/3/movie/popular?api_key=5e6fc583c7106815bcd4093a90cdf271&language=en-US&page=1");
+        let data=await res.json();
+     let movie_data=data.results;
+     movie_data.forEach(element => {
+        //  console.log(element)
+           var div=document.createElement('div');
+           div.style.width="120px"
+           var img=document.createElement("img");
+           div.onclick=()=>{
+               alert(element.original_title)
+            // start
+            slide.innerHTML=null;
+            var showdiv=document.createElement("div");
+            showdiv.style.width="100%";
+             var img=document.createElement("img");
+             img.src=`https://image.tmdb.org/t/p/original/${element.poster_path}`;
+            
+             img.style.height="380px"
+             var text_div=document.createElement("div");
+             text_div.style.display="inline";
+           
+             text_div.style.paddingTop="200px"
+          
+             text_div.style.width="200px";
+         
+            
+             var Title=document.createElement("p");
+             var p=document.createElement("p")
+             p.innerText= "Released in : "+element.release_date
+           
+             Title.innerText= "TITLE : "+ element.original_title
+             text_div.append(Title,p)
+             
+             showdiv.append(img)
+             slide.append(showdiv,text_div)
+            // end
+               
+           }
+         img.src=`https://image.tmdb.org/t/p/original/${element.poster_path}`
+         img.style.width="100%"
+          div.append(img)
+          var trending=document.getElementById("trending");
+          trending.append(div)
+       });
+    }
+    popular()
+
 </script>
